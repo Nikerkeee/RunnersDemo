@@ -30,7 +30,7 @@ public class DataLoader implements CommandLineRunner {
         SponsorEntity sponsor = new SponsorEntity();
         sponsor.setSponsorName("Sponsor1");
         SponsorEntity sponsor2 = new SponsorEntity();
-        sponsor.setSponsorName("Sponsor2");
+        sponsor2.setSponsorName("Sponsor2");
 
         sponsorRepository.save(sponsor);
         sponsorRepository.save(sponsor2);

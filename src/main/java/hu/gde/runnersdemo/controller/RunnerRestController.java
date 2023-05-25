@@ -1,9 +1,11 @@
 package hu.gde.runnersdemo.controller;
 
+import hu.gde.runnersdemo.model.SponsorEntity;
 import hu.gde.runnersdemo.repository.LapTimeRepository;
 import hu.gde.runnersdemo.repository.RunnerRepository;
 import hu.gde.runnersdemo.model.LapTimeEntity;
 import hu.gde.runnersdemo.model.RunnerEntity;
+import hu.gde.runnersdemo.repository.SponsorRepository;
 import hu.gde.runnersdemo.service.RunnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,16 +18,18 @@ import java.util.List;
 @RequestMapping("/api/v1/runner")
 public class RunnerRestController {
 
+    private final RunnerRepository runnerRepository;
+    private final SponsorRepository sponsorRepository;
     @Autowired
     private LapTimeRepository lapTimeRepository;
     @Autowired
     private RunnerService runnerService;
-    private RunnerRepository runnerRepository;
 
     @Autowired
-    public RunnerRestController(RunnerRepository runnerRepository, LapTimeRepository lapTimeRepository, RunnerService runnerService) {
+    public RunnerRestController(RunnerRepository runnerRepository, LapTimeRepository lapTimeRepository, SponsorRepository sponsorRepository, RunnerService runnerService) {
         this.runnerRepository = runnerRepository;
         this.lapTimeRepository = lapTimeRepository;
+        this.sponsorRepository = sponsorRepository;
         this.runnerService = runnerService;
     }
 
@@ -63,6 +67,24 @@ public class RunnerRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Runner with ID " + id + " not found");
         }
     }
+
+    @PostMapping("/{id}/updateSponsor")
+    public ResponseEntity updateSponsor(@PathVariable Long id, @RequestBody SponsorRequest sponsorRequest) {
+        RunnerEntity runner = runnerRepository.findById(id).orElse(null);
+        SponsorEntity sponsor = sponsorRepository.findById((long) sponsorRequest.getSponsorId()).orElse(null);
+        if (runner != null && sponsor != null) {
+            runner.setSponsor(sponsor);
+            runnerRepository.save(runner);
+            return ResponseEntity.ok().build();
+        } else if (runner == null && sponsor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Runner with ID " + id + "  and Sponsor with ID " + sponsorRequest.sponsorId + " not found");
+        } else if (sponsor == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sponsor with ID " + sponsorRequest.sponsorId + " not found");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Runner with ID " + id + " not found");
+        }
+    }
+
     public static class LapTimeRequest {
         private int lapTimeSeconds;
 
@@ -72,6 +94,18 @@ public class RunnerRestController {
 
         public void setLapTimeSeconds(int lapTimeSeconds) {
             this.lapTimeSeconds = lapTimeSeconds;
+        }
+    }
+
+    public static class SponsorRequest {
+        private int sponsorId;
+
+        public int getSponsorId() {
+            return sponsorId;
+        }
+
+        public void setSponsorId(int sponsorId) {
+            this.sponsorId = sponsorId;
         }
     }
 }
