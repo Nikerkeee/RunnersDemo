@@ -6,6 +6,7 @@ import hu.gde.runnersdemo.repository.RunnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -30,5 +31,12 @@ public class RunnerService {
         } else {
             return -1.0;
         }
+    }
+
+    public String getTallestRunnerName() {
+        return runnerRepository.findAll()
+            .stream()
+            .max(Comparator.comparingInt(RunnerEntity::getHeight)).orElse(new RunnerEntity())
+            .getRunnerName();
     }
 }

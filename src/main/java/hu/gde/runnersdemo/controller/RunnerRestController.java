@@ -4,6 +4,7 @@ import hu.gde.runnersdemo.repository.LapTimeRepository;
 import hu.gde.runnersdemo.repository.RunnerRepository;
 import hu.gde.runnersdemo.model.LapTimeEntity;
 import hu.gde.runnersdemo.model.RunnerEntity;
+import hu.gde.runnersdemo.service.RunnerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ public class RunnerRestController {
 
     @Autowired
     private LapTimeRepository lapTimeRepository;
+    @Autowired
+    private RunnerService runnerService;
     private RunnerRepository runnerRepository;
 
     @Autowired
-    public RunnerRestController(RunnerRepository runnerRepository, LapTimeRepository lapTimeRepository) {
+    public RunnerRestController(RunnerRepository runnerRepository, LapTimeRepository lapTimeRepository, RunnerService runnerService) {
         this.runnerRepository = runnerRepository;
         this.lapTimeRepository = lapTimeRepository;
+        this.runnerService = runnerService;
     }
 
     @GetMapping("/{id}")
@@ -32,18 +36,12 @@ public class RunnerRestController {
 
     @GetMapping("/{id}/averagelaptime")
     public double getAverageLaptime(@PathVariable Long id) {
-        RunnerEntity runner = runnerRepository.findById(id).orElse(null);
-        if (runner != null) {
-            List<LapTimeEntity> laptimes = runner.getLaptimes();
-            int totalTime = 0;
-            for (LapTimeEntity laptime : laptimes) {
-                totalTime += laptime.getTimeSeconds();
-            }
-            double averageLaptime = (double) totalTime / laptimes.size();
-            return averageLaptime;
-        } else {
-            return -1.0;
-        }
+        return runnerService.getAverageLaptime(id);
+    }
+
+    @GetMapping("/tallestRunner")
+    public String getTallestRunnerName() {
+        return runnerService.getTallestRunnerName();
     }
 
     @GetMapping("")
