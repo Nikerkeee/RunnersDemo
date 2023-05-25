@@ -26,6 +26,7 @@ public class RunnerController {
     public String getAllRunners(Model model) {
         List<RunnerEntity> runners = runnerRepository.findAll();
         model.addAttribute("runners", runners);
+        model.addAttribute("runnersAvgHeight", (int) runners.stream().mapToInt(RunnerEntity::getHeight).average().orElse(0));
         return "runners";
     }
 
