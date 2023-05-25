@@ -1,5 +1,8 @@
-package hu.gde.runnersdemo;
+package hu.gde.runnersdemo.service;
 
+import hu.gde.runnersdemo.model.LapTimeEntity;
+import hu.gde.runnersdemo.model.RunnerEntity;
+import hu.gde.runnersdemo.repository.RunnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

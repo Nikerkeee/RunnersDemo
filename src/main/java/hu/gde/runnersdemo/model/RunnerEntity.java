@@ -1,4 +1,4 @@
-package hu.gde.runnersdemo;
+package hu.gde.runnersdemo.model;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;

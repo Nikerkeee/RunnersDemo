@@ -1,4 +1,4 @@
-package hu.gde.runnersdemo;
+package hu.gde.runnersdemo.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

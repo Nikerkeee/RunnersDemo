@@ -1,5 +1,10 @@
-package hu.gde.runnersdemo;
+package hu.gde.runnersdemo.controller;
 
+import hu.gde.runnersdemo.repository.LapTimeRepository;
+import hu.gde.runnersdemo.repository.RunnerRepository;
+import hu.gde.runnersdemo.service.RunnerService;
+import hu.gde.runnersdemo.model.LapTimeEntity;
+import hu.gde.runnersdemo.model.RunnerEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
